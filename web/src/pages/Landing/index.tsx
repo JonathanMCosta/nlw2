@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 
 import logoImf from "../../assets/images/logo.svg";
@@ -9,8 +9,20 @@ import giveClassesIson from "../../assets/images/icons/give-classes.svg";
 import purpleHeartIson from "../../assets/images/icons/purple-heart.svg";
 
 import './style.css'
+import api from '../../services/api';
 
 function Landing() {
+  const [totalConnections, setTotalConnections] = useState(0);
+
+  useEffect(() => {
+    api.get('connections').then(response => {
+      const { total } = response.data;
+      setTotalConnections(total);
+    })
+  }, [
+    //caso tenha uma variavel que sempre vámudar, informo ela aqui, quando ela alterar a função será executada
+  ])
+
   return (
     <div id="page-landing">
       <div id="page-landing-content" className="container">
@@ -33,7 +45,7 @@ function Landing() {
         </div>
 
         <span className="total-connections">
-          Total de 200 conexões já realizadas <img src={purpleHeartIson} alt="Coração roxo" />
+          Total de {totalConnections} conexões já realizadas <img src={purpleHeartIson} alt="Coração roxo" />
         </span>
       </div>
     </div>)
